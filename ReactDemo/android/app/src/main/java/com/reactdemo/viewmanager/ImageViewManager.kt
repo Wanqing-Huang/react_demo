@@ -9,7 +9,6 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.shopee.android.log.impl.Logger
-import com.shopee.foody.driver.widgets.SlideView
 
 
 /**
@@ -39,12 +38,12 @@ class ImageViewManager : SimpleViewManager<Button>() {
         return Button(reactContext).apply {
             setOnClickListener {
                 reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(
-                    id, EVENT_NAME_ON_CLICK, Arguments.createMap()
+                        id, EVENT_NAME_ON_CLICK, Arguments.createMap()
                 )
             }
             setOnLongClickListener {
                 reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(
-                    id, EVENT_NAME_ON_LONG_CLICK, Arguments.createMap()
+                        id, EVENT_NAME_ON_LONG_CLICK, Arguments.createMap()
                 )
                 true
             }
@@ -78,10 +77,10 @@ class ImageViewManager : SimpleViewManager<Button>() {
 
     override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
         return MapBuilder.of(
-            EVENT_NAME_ON_CLICK,
-            MapBuilder.of("registrationName", EVENT_NAME_ON_CLICK),
-            EVENT_NAME_ON_LONG_CLICK,
-            MapBuilder.of("registrationName", EVENT_NAME_ON_LONG_CLICK)
+                EVENT_NAME_ON_CLICK,
+                MapBuilder.of("registrationName", EVENT_NAME_ON_CLICK),
+                EVENT_NAME_ON_LONG_CLICK,
+                MapBuilder.of("registrationName", EVENT_NAME_ON_LONG_CLICK)
         )
     }
 
@@ -89,12 +88,12 @@ class ImageViewManager : SimpleViewManager<Button>() {
     //======================== 定义提供给RN调用的命令 ============================//
     override fun getCommandsMap(): MutableMap<String, Int> {
         return MapBuilder.of(
-            COMMAND_SET_ENABLE,
-            COMMAND_ID_SET_ENABLE
+                COMMAND_SET_ENABLE,
+                COMMAND_ID_SET_ENABLE
         )
     }
 
-    override fun receiveCommand(view: SlideView, commandId: Int, args: ReadableArray?) {
+    override fun receiveCommand(view: Button, commandId: Int, args: ReadableArray?) {
         Logger.d(TAG, "receive command : view = $view, commandId = $commandId")
         when (commandId) {
             COMMAND_ID_SET_ENABLE -> setEnable(args, view)
@@ -102,8 +101,8 @@ class ImageViewManager : SimpleViewManager<Button>() {
     }
 
     private fun setEnable(
-        args: ReadableArray?,
-        view: SlideView
+            args: ReadableArray?,
+            view: Button
     ) {
         val enable = args?.toArrayList()?.getOrNull(0) as? Boolean ?: return
         view.isEnabled = enable
