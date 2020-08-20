@@ -1,4 +1,4 @@
-package com.reactdemo.module
+package com.reactdemo.package
 
 import android.view.View
 import com.facebook.react.ReactPackage

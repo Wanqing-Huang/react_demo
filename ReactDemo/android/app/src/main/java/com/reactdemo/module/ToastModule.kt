@@ -1,9 +1,9 @@
-package com.shopee.foody.driver.react.module
+package com.reactdemo.module
 
 import android.widget.Toast
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter
+
 
 class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
     companion object{
@@ -16,7 +16,7 @@ class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule
     }
 
     /**
-     * 返回了需要导出给 JavaScript 使用的常量
+     * 提供给RN定义的常量
      */
     override fun getConstants(): MutableMap<String, Any> {
         val constants: MutableMap<String, Any> = HashMap()
@@ -26,20 +26,40 @@ class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule
     }
 
     /**
-     * React Native 的跨语言访问是异步进行的，所以想要给 JavaScript 返回一个值的唯一办法是使用回调函数或者发送事件
-     *
-     * 参数类型映射关系：
-     * Boolean -> Bool
-     * Integer -> Number
-     * Double -> Number
-     * Float -> Number
-     * String -> String
-     * Callback -> function
-     * ReadableMap -> Object
-     * ReadableArray -> Array
+     * 提供给RN调用的方法
+     * @param message 参数1
+     * @param duration 参数2
+     * @param promise 回调
      */
     @ReactMethod
-    fun show(message: String?, duration: Int) {
-        Toast.makeText(reactApplicationContext, message, duration).show()
+    fun show(message: String?, duration: Int, promise: Promise) {
+        if(message.isNullOrBlank()){
+            promise.reject("-1", "message can't be null.")
+        }else{
+            Toast.makeText(reactApplicationContext, message, duration).show()
+            promise.resolve(true)
+        }
+    }
+
+    /**
+     * 发送事件给RN
+     * @param eventName 事件名
+     * @param params 参数
+     */
+    private fun sendEvent(
+            reactContext: ReactContext,
+            eventName: String,
+            params: WritableMap
+    ) {
+        reactContext
+                .getJSModule(RCTDeviceEventEmitter::class.java)
+                .emit(eventName, params)
+    }
+
+    private fun sendEventDemo(){
+        val params = Arguments.createMap().apply {
+            putString("eventProperty", "someValue")
+        }
+        sendEvent(reactApplicationContext, "DemoEvent", params)
     }
 }
