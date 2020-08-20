@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Button, Image, TextInput, ScrollView, Text, View, NativeModules } from "react-native";
-import Toast from NativeModules.ToastModule;
+
+const Toast =  NativeModules.CustomToast
+const logo = {
+  uri: 'https://reactnative.dev/img/tiny_logo.png',
+  width: 64,
+  height: 64
+};
 
 /**
 * 自定义组件
@@ -66,22 +72,16 @@ function ImageDemo(){
   );
 }
 
-
-
-const logo = {
-  uri: 'https://reactnative.dev/img/tiny_logo.png',
-  width: 64,
-  height: 64
-};
-
-
+/**
+* 调用NativeModule demo
+**/
 function NativeMethodDemo() {
   return (
     <View>
       <Title content="Native Method Demo"/>
       <Button style={{marginTop: 8}}
         onPress={() => {
-          Toast.show('Awesome', Toast.SHORT);
+         Toast.show('I am a toast invoke from react', Toast.SHORT);
         }}
         title="click me to toast"
       />
