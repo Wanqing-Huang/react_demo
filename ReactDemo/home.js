@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Image, TextInput, ScrollView, Text, View } from "react-native";
+import { Button, Image, TextInput, ScrollView, Text, View, NativeModules } from "react-native";
+import Toast from NativeModules.ToastModule;
 
 /**
 * 自定义组件
@@ -73,6 +74,21 @@ const logo = {
   height: 64
 };
 
+
+function NativeMethodDemo() {
+  return (
+    <View>
+      <Title content="Native Method Demo"/>
+      <Button style={{marginTop: 8}}
+        onPress={() => {
+          Toast.show('Awesome', Toast.SHORT);
+        }}
+        title="click me to toast"
+      />
+    </View>
+  );
+}
+
 /**
 * 自定义导出组件
 * 使用了export default语句来导出这个组件，以使其可以在其他地方引入使用
@@ -83,6 +99,7 @@ export default function Cafe() {
       <TextInputDemo/>
       <ImageDemo/>
       <StateDemo/>
+      <NativeMethodDemo/>
     </ScrollView>
   );
 }

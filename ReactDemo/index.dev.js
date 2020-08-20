@@ -3,9 +3,8 @@
  */
 
 import {AppRegistry} from 'react-native';
-import App from './App';
-import ui from './ui';
+import home from './home';
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => ui);
-AppRegistry.registerComponent("@shopee-rn/main/HOME", () => ui);
+AppRegistry.registerComponent(appName, () => home);
+AppRegistry.registerComponent("@shopee-rn/main/HOME", () => home);

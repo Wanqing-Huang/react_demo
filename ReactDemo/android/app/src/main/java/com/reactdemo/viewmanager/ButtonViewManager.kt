@@ -1,4 +1,4 @@
-package com.reactdemo.viewmanager
+package com.shopee.foody.driver.react.viewmanager
 
 import android.widget.Button
 import com.facebook.react.bridge.Arguments
@@ -15,9 +15,9 @@ import com.shopee.android.log.impl.Logger
  * @author vianhuang
  * @date 2020/8/20 6:16 PM
  */
-class ImageViewManager : SimpleViewManager<Button>() {
+class ButtonViewManager : SimpleViewManager<Button>() {
     companion object {
-        private const val TAG = "ImageViewManager"
+        private const val TAG = "ButtonViewManager"
 
         //定义event
         private const val EVENT_NAME_ON_CLICK = "onClick"
@@ -38,12 +38,12 @@ class ImageViewManager : SimpleViewManager<Button>() {
         return Button(reactContext).apply {
             setOnClickListener {
                 reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(
-                        id, EVENT_NAME_ON_CLICK, Arguments.createMap()
+                    id, EVENT_NAME_ON_CLICK, Arguments.createMap()
                 )
             }
             setOnLongClickListener {
                 reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(
-                        id, EVENT_NAME_ON_LONG_CLICK, Arguments.createMap()
+                    id, EVENT_NAME_ON_LONG_CLICK, Arguments.createMap()
                 )
                 true
             }
@@ -77,10 +77,10 @@ class ImageViewManager : SimpleViewManager<Button>() {
 
     override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any> {
         return MapBuilder.of(
-                EVENT_NAME_ON_CLICK,
-                MapBuilder.of("registrationName", EVENT_NAME_ON_CLICK),
-                EVENT_NAME_ON_LONG_CLICK,
-                MapBuilder.of("registrationName", EVENT_NAME_ON_LONG_CLICK)
+            EVENT_NAME_ON_CLICK,
+            MapBuilder.of("registrationName", EVENT_NAME_ON_CLICK),
+            EVENT_NAME_ON_LONG_CLICK,
+            MapBuilder.of("registrationName", EVENT_NAME_ON_LONG_CLICK)
         )
     }
 
@@ -88,8 +88,8 @@ class ImageViewManager : SimpleViewManager<Button>() {
     //======================== 定义提供给RN调用的命令 ============================//
     override fun getCommandsMap(): MutableMap<String, Int> {
         return MapBuilder.of(
-                COMMAND_SET_ENABLE,
-                COMMAND_ID_SET_ENABLE
+            COMMAND_SET_ENABLE,
+            COMMAND_ID_SET_ENABLE
         )
     }
 
@@ -101,8 +101,8 @@ class ImageViewManager : SimpleViewManager<Button>() {
     }
 
     private fun setEnable(
-            args: ReadableArray?,
-            view: Button
+        args: ReadableArray?,
+        view: Button
     ) {
         val enable = args?.toArrayList()?.getOrNull(0) as? Boolean ?: return
         view.isEnabled = enable

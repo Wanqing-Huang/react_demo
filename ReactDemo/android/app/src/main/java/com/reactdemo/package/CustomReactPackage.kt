@@ -19,7 +19,9 @@ class CustomReactPackage: ReactPackage {
         return modules
     }
 
-    override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<View, ReactShadowNode<*>>> {
-        return Collections.emptyList()
+    override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<*, *>> {
+        val managers: MutableList<ViewManager<*, *>> = mutableListOf()
+        managers.add(ButtonViewManager())
+        return managers
     }
 }
