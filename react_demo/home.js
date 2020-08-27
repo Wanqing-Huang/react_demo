@@ -1,16 +1,39 @@
 import React, { useState } from "react";
-import { Button, Image, TextInput, ScrollView, Text, View, NativeModules } from "react-native";
+import { Button, Image, TextInput, ScrollView, Text, View, Alert, NativeModules, NativeEventEmitter, requireNativeComponent } from "react-native";
 
-const Toast =  NativeModules.ToastModule
-const logo = {
-  uri: 'https://reactnative.dev/img/tiny_logo.png',
-  width: 64,
-  height: 64
-};
+
+/*============================= 组件的使用 ================================*/
+/**
+* 基础组件使用
+*/
+function BaseComponentDemo() {
+  const [text, setText] = useState('');
+  return (
+    <View>
+      <Title content="Component Demo"/>
+      <Text style={{fontSize: 16}}>I am a Text component.</Text>
+      <TextInput
+        style={{height: 40}}
+        placeholder="I am a TextInput component."
+        onChangeText={text => setText(text)}
+        defaultValue={text}
+      />
+      <Image
+        style={{width: 64, height: 64}}
+        source={{uri:'https://reactnative.dev/img/tiny_logo.png'}}
+      />
+      <Button
+        title="I am a Button component."
+        onPress={() => Alert.alert('Right button pressed')}
+      />
+      <StateDemo/>
+    </View>
+  );
+}
 
 /**
 * 自定义组件
-* @param props：属性数组
+* @param props：组件属性数组
 **/
 function Title(props){
     return <View style={{marginTop: 24, marginBottom: 12}}>
@@ -20,16 +43,13 @@ function Title(props){
     </View>
 }
 
-
 /**
 * 有状态组件
 **/
 function StateDemo() {
-  //it doesn’t matter what names you use. But it can be handy to think of the pattern as [<getter>, <setter>] = useState(<initialValue>).
   const [isHungry, setIsHungry] = useState(true);
   return (
     <View>
-      <Title content="State Demo"/>
       <Text style={{fontSize: 16}}>
         current state is: {isHungry ? "hungry" : "full"}
       </Text>
@@ -43,47 +63,73 @@ function StateDemo() {
   );
 }
 
-function TextInputDemo(){
-  const [text, setText] = useState('');
+
+/*============================= 使用Native自定义View ================================*/
+const CustomButtonView = requireNativeComponent("CustomButtonView")
+function NativeViewDemo() {
   return (
     <View>
-      <Title content="TextInput Demo"/>
-      <TextInput
-        style={{height: 40}}
-        placeholder="please input string here"
-        onChangeText={text => setText(text)}
-        defaultValue={text}
+      <Title content="Native View Demo"/>
+      <CustomButtonView
+        width={350}
+        height={48}
+        text="I am a native view"
       />
-      <Text>
-        {text}
-      </Text>
     </View>
   );
 }
 
-function ImageDemo(){
-  return (
-    <View>
-      <Title content="Image Demo"/>
-      <Image
-        source={logo}
-      />
-    </View>
-  );
-}
+/*============================= RN与Native通信 ================================*/
 
 /**
-* 调用NativeModule demo
+* RN调用Native的方法
 **/
-function NativeMethodDemo() {
+const Toast =  NativeModules.ToastModule
+class NativeMethodDemo extends Component{
+    function render() {
+        return (
+            <View>
+                <Title content="Native Method Demo"/>
+                <Button style={{marginTop: 8}}
+                    onPress={() => {
+                        Toast.show('I am a toast invoke from react', Toast.SHORT);
+                    }}
+                    title="click me to toast"
+                />
+            </View>
+        );
+    }
+
+    componentDidMount() {
+        const eventEmitter = new NativeEventEmitter();
+        eventEmitter.addListener('DemoEvent', (event) => {
+          alert("DemoEvent:" + event.eventProperty)
+        });
+    }
+
+    componentWillUnmount() {
+        this.eventListener.remove();
+    }
+}
+
+
+/**
+* RN监听Native发送来的事件
+**/
+const eventEmitter = new NativeEventEmitter();
+eventEmitter.addListener('DemoEvent', (event) => {
+  alert("DemoEvent:" + event.eventProperty)
+});
+
+function EventListenerDemo() {
   return (
     <View>
-      <Title content="Native Method Demo"/>
+      <Title content="Event Listener Demo"/>
       <Button style={{marginTop: 8}}
         onPress={() => {
-         Toast.show('I am a toast invoke from react', Toast.SHORT);
+         Toast.sendEventDemo();
         }}
-        title="click me to toast"
+        title="click me to send a native event"
       />
     </View>
   );
@@ -93,13 +139,13 @@ function NativeMethodDemo() {
 * 自定义导出组件
 * 使用了export default语句来导出这个组件，以使其可以在其他地方引入使用
 **/
-export default function Cafe() {
+export default function Home() {
   return (
     <ScrollView style={{padding: 12, marginTop: 24}}>
-      <TextInputDemo/>
-      <ImageDemo/>
-      <StateDemo/>
+      <BaseComponentDemo/>
+      <NativeViewDemo/>
       <NativeMethodDemo/>
+      <EventListenerDemo/>
     </ScrollView>
   );
 }

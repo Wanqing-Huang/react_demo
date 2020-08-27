@@ -7,7 +7,7 @@ import java.util.*
 
 
 class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
-    companion object{
+    companion object {
         private const val DURATION_SHORT_KEY = "SHORT"
         private const val DURATION_LONG_KEY = "LONG"
     }
@@ -34,9 +34,9 @@ class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule
      */
     @ReactMethod
     fun show(message: String?, duration: Int, promise: Promise) {
-        if(message.isNullOrBlank()){
+        if (message.isNullOrBlank()) {
             promise.reject("-1", "message can't be null.")
-        }else{
+        } else {
             Toast.makeText(reactApplicationContext, message, duration).show()
             promise.resolve(true)
         }
@@ -57,7 +57,8 @@ class ToastModule(context: ReactApplicationContext) : ReactContextBaseJavaModule
                 .emit(eventName, params)
     }
 
-    private fun sendEventDemo(){
+    @ReactMethod
+    fun sendEventDemo() {
         val params = Arguments.createMap().apply {
             putString("eventProperty", "someValue")
         }

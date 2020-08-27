@@ -31,7 +31,7 @@ class ButtonViewManager : SimpleViewManager<Button>() {
     }
 
     override fun getName(): String {
-        return "RCTImageView"
+        return "CustomButtonView"
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): Button {
