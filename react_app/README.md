@@ -12,6 +12,10 @@
 2. 运行命令安装第三方库
 npm install react-native-maps
 
+## 打包bundle
+1. 在 android/app/src/main/ 目录下创建 assets 目录
+2. 执行打包命令：
+react-native bundle --entry-file index.js --platform android --dev false --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res/
 
 ## 多线程
 React Native 的跨语言访问是异步进行的，所以想要给 JavaScript 返回一个值的唯一办法是使用回调函数或者发送事件。
